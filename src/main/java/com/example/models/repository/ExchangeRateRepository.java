@@ -11,7 +11,7 @@ public interface ExchangeRateRepository extends CrudRepository<ExchangeRate,Inte
     Optional<ExchangeRate> findById(Integer id);
 
     @Override
-    Currency save(ExchangeRate exchangeRate);
+    ExchangeRate save(ExchangeRate exchangeRate);
 
     @Override
     Iterable<ExchangeRate> findAll();

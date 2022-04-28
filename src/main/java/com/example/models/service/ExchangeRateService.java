@@ -16,7 +16,8 @@ public interface ExchangeRateService {
     Completable deleteCurrencyById(Integer id);
 
     Flowable<ExchangeRate> listExchangeRate();
-    Maybe<Currency>  ExchangeRateById(Integer id);
-    Single<Currency> saveExchangeRate(ExchangeRate exchangeRate);
+    Maybe<ExchangeRate>  ExchangeRateById(Integer id);
+    Single<ExchangeRate> saveExchangeRate(ExchangeRate exchangeRate);
+    Single<ExchangeRate> updateExchangeRate(ExchangeRate exchangeRate);
     Completable deleteExchangeRateById(Integer id);
 }

@@ -5,8 +5,9 @@ import com.example.models.entity.ExchangeRate;
 import com.example.models.repository.CurrencyRepository;
 import com.example.models.repository.ExchangeRateRepository;
 import com.example.models.service.ExchangeRateService;
-import com.example.payloads.exception.CurrencyIdNotNullException;
-import com.example.payloads.exception.CurrencyNotFoundException;
+import com.example.exceptions.CurrencyIdNotNullException;
+import com.example.exceptions.CurrencyNotFoundException;
+import com.example.exceptions.ExchangeRateNotFoundException;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
 import io.reactivex.Maybe;
@@ -14,7 +15,6 @@ import io.reactivex.Single;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Optional;
 
@@ -24,6 +24,7 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
 
     private Optional<Integer>  currencyId;
     private Optional<Currency> existsCurrencyById ;
+    private Optional<ExchangeRate> existsExchangeRateById ;
 
     @Autowired
     CurrencyRepository currencyRepository;
@@ -95,20 +96,15 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
     }
 
     @Override
-    public Maybe<Currency> ExchangeRateById(Integer id) {
-        return null;
+    public Maybe<ExchangeRate> ExchangeRateById(Integer id) {
+        Optional<ExchangeRate> exchangeOptional = exchangeRateRepository.findById(id);
+        exchangeOptional.orElseThrow(()
+                -> new ExchangeRateNotFoundException("No Existe este Numero de ID '"+id+"'"));
+        return exchangeOptional.isPresent() ? Maybe.just(exchangeOptional.get()) : Maybe.empty();
     }
 
-//    @Override
-//    public Maybe<Currency> ExchangeRateById(Integer id) {
-//        Optional<ExchangeRate> exchangeOptional = exchangeRateRepository.findById(idExchange);
-//        exchangeOptional.orElseThrow(()
-//                -> new ExchangeRateNotFoundException("No Existe este Numero de ID '"+idExchange+"'"));
-//        return exchangeOptional.isPresent() ? Maybe.just(exchangeOptional.get()) : Maybe.empty();
-//    }
-
     @Override
-    public Single<Currency> saveExchangeRate(ExchangeRate exchangeRate) {
+    public Single<ExchangeRate> saveExchangeRate(ExchangeRate exchangeRate) {
         return Single.fromCallable(() -> exchangeRateRepository.save(exchangeRate))
                 .doOnSuccess(s -> log.info("Success {}.{} method - {}", "ExchangeRateServiceImpl", "saveExchange", s))
                 .doOnError(throwable -> log.info("Error {}.{} method, with error {}", "ExchangeRateServiceImpl",
@@ -117,16 +113,29 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
     }
 
     @Override
-    public Completable deleteExchangeRateById(Integer id) {
-        return null;
+    public Single<ExchangeRate> updateExchangeRate(ExchangeRate exchangeRate) {
+        log.info("Starting {}.{} method", "ExchangeRateServiceImpl", "updateExchangeRate");
+        currencyId = Optional.ofNullable(exchangeRate.getId());
+        currencyId.orElseThrow(()-> new CurrencyIdNotNullException("EL N° DE ID DE ESTA MONEDA NO EXISTE"));
+
+        existsExchangeRateById = exchangeRateRepository.findById(exchangeRate.getId());
+        existsExchangeRateById.orElseThrow(() -> new CurrencyNotFoundException("NO EXISTE ESTE N° ID '" + exchangeRate.getId() + "'"));
+        return Single.fromCallable(()-> exchangeRateRepository.save(exchangeRate))
+                .doOnSuccess(s-> log.info("Success {}.{} method - {}", "ExchangeRateServiceImpl", "updateExchangeRate", s))
+                .doOnError(throwable -> log.info("Error {}.{} method, with error {}", "ExchangeRateServiceImpl",
+                        "updateCurrency", throwable.getMessage()))
+                .doOnTerminate(()-> log.info("Terminate {}.{} method", "ExchangeRateServiceImpl", "updateExchangeRate"));
     }
 
-//    @Override
-//    public Completable deleteExchangeRateById(Integer id) {
-//        ExchangeRate exchange = exchangeRateRepository.findById(id).orElseThrow(() ->
-//                new ExchangeRateNotFoundException("No existe codigo para ese tipo de " + "cambio"));
-//        exchangeRateRepository.deleteById(exchange.getId());
-//        return Completable.complete();
-//    }
+    @Override
+    public Completable deleteExchangeRateById(Integer id) {
+        log.info("Starting {}.{} method", "ExchangeRateServiceImpl", "deleteCurrencyById");
+        currencyId = Optional.ofNullable(id);
+        currencyId.orElseThrow(()-> new CurrencyIdNotNullException("EL N° DE ID DE ESTA MONEDA NO EXISTE"));
 
+        existsCurrencyById = currencyRepository.findById(id);
+        existsCurrencyById.orElseThrow(() -> new ExchangeRateNotFoundException("NO EXISTE ESTE N° ID '" + id + "'"));
+        currencyRepository.deleteById(id);
+        return Completable.complete();
+    }
 }

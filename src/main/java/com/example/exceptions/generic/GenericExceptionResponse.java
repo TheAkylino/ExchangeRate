@@ -1,4 +1,4 @@
-package com.example.payloads.exception.generic;
+package com.example.exceptions.generic;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

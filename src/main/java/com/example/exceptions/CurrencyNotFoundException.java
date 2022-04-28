@@ -1,12 +1,12 @@
-package com.example.payloads.exception;
+package com.example.exceptions;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
-public class CurrencyIdNotNullException  extends RuntimeException {
+public class CurrencyNotFoundException extends RuntimeException {
 
-    public CurrencyIdNotNullException(String message) {
+    public CurrencyNotFoundException(String message) {
         super(message);
     }
 }

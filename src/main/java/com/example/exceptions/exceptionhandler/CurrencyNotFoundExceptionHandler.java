@@ -1,7 +1,7 @@
-package com.example.payloads.exception.exceptionhandler;
+package com.example.exceptions.exceptionhandler;
 
-import com.example.payloads.exception.CurrencyIdNotNullException;
-import com.example.payloads.exception.generic.GenericExceptionResponse;
+import com.example.exceptions.generic.GenericExceptionResponse;
+import com.example.exceptions.CurrencyNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -14,10 +14,10 @@ import java.util.Date;
 
 @ControllerAdvice
 @RestController
-public class CurrencyIdNotNullExceptionHandler extends ResponseEntityExceptionHandler {
+public class CurrencyNotFoundExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(CurrencyIdNotNullException.class)
-    public final ResponseEntity<Object> configExceptionHandler(CurrencyIdNotNullException ex, WebRequest request) {
+    @ExceptionHandler(CurrencyNotFoundException.class)
+    public final ResponseEntity<Object> configExceptionHandler(CurrencyNotFoundException ex, WebRequest request) {
         return new ResponseEntity(new GenericExceptionResponse(new Date(), ex.getMessage(),
                 request.getDescription(false)), HttpStatus.NOT_FOUND);
     }
