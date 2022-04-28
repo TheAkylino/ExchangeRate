@@ -7,7 +7,6 @@ import java.util.Optional;
 
 public interface CurrencyRepository extends CrudRepository<Currency,Integer> {
 
-    Optional<Currency> findByCodeIso(String code);
     Optional<Currency> findById(Integer id);
 
     @Override
