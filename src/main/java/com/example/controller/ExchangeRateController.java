@@ -1,5 +1,7 @@
 package com.example.controller;
 
+import com.example.dtos.reponse.ChangeExchangeRateResponse;
+import com.example.dtos.request.ChangeExchangeRateRequest;
 import com.example.models.entity.Currency;
 import com.example.models.entity.ExchangeRate;
 import com.example.models.service.ExchangeRateService;
@@ -84,7 +86,7 @@ public class ExchangeRateController {
                         "listExchange", throwable.getMessage()));
     }
 
-    @GetMapping("/ExchangeRateById/{id}")
+    @GetMapping("/exchangeRateById/{id}")
     public Maybe<ExchangeRate> ExchangeRateId(@PathVariable Integer id) {
         log.info("Starting {}.{} method", "ExchangeRateController", "ExchangeRateId");
         return exchangeRateService.ExchangeRateById(id)
@@ -117,5 +119,15 @@ public class ExchangeRateController {
     public Completable deleteExchangeRateById(@PathVariable Integer id) {
         log.info("Starting {}.{} method", "ExchangeRateController", "deleteCurrencyById");
         return exchangeRateService.deleteExchangeRateById(id);
+    }
+
+    @PostMapping("/calculateExchangeRate")
+    public Single<ChangeExchangeRateResponse> changeExchangeRate(@RequestBody ChangeExchangeRateRequest request) {
+        log.info("Starting {}.{} method", "ExchangeRateController", "changeExchangeRate");
+        return exchangeRateService.calculateExchangeRate(request)
+                .doOnSuccess(s -> log.info("Success {}.{} method - {}", "ExchangeRateController", "changeExchangeRate", s))
+                .doOnError(throwable -> log.info("Error {}.{} method, with error {}", "ExchangeRateController",
+                        "saveCurrency", throwable.getMessage()))
+                .doOnTerminate(() -> log.info("Terminate {}.{} method", "ExchangeRateController", "changeExchangeRate"));
     }
 }

@@ -1,5 +1,7 @@
 package com.example.models.service;
 
+import com.example.dtos.reponse.ChangeExchangeRateResponse;
+import com.example.dtos.request.ChangeExchangeRateRequest;
 import com.example.models.entity.Currency;
 import com.example.models.entity.ExchangeRate;
 import io.reactivex.Completable;
@@ -20,4 +22,5 @@ public interface ExchangeRateService {
     Single<ExchangeRate> saveExchangeRate(ExchangeRate exchangeRate);
     Single<ExchangeRate> updateExchangeRate(ExchangeRate exchangeRate);
     Completable deleteExchangeRateById(Integer id);
+    Single<ChangeExchangeRateResponse> calculateExchangeRate(ChangeExchangeRateRequest request);
 }

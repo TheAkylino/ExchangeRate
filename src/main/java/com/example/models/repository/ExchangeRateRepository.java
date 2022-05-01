@@ -1,12 +1,13 @@
 package com.example.models.repository;
 
-import com.example.models.entity.Currency;
 import com.example.models.entity.ExchangeRate;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
 public interface ExchangeRateRepository extends CrudRepository<ExchangeRate,Integer> {
+
+    Optional<ExchangeRate> findByCodeOriginCurrencyAndCodeDestinationCurrency(String codeOriginCurrency, String codeDestinationCurrency);
 
     Optional<ExchangeRate> findById(Integer id);
 

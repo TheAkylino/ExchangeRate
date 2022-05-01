@@ -15,7 +15,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-
 @Table(name = "EXCHANGE_RATE")
 @ApiModel(description = "Todo los detalles del tipo de cambio")
 public class ExchangeRate {
@@ -32,7 +31,7 @@ public class ExchangeRate {
     @ApiModelProperty(notes = "Codigo iso de la moneda de destino")
     private String codeDestinationCurrency;
 
-    @Column(name = "AMOUNT", nullable = false)
-    @ApiModelProperty(notes = "Monto del tipo de cambio")
-    private BigDecimal amount;
+    @Column(name = "RATE_OF_EXCHANGE", nullable = false)
+    @ApiModelProperty(notes = "MONTO DE LA TAZA DE CAMBIO")
+    private BigDecimal rateExchange;
 }

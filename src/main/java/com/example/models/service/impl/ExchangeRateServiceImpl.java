@@ -1,5 +1,7 @@
 package com.example.models.service.impl;
 
+import com.example.dtos.reponse.ChangeExchangeRateResponse;
+import com.example.dtos.request.ChangeExchangeRateRequest;
 import com.example.models.entity.Currency;
 import com.example.models.entity.ExchangeRate;
 import com.example.models.repository.CurrencyRepository;
@@ -16,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Optional;
 
 @Slf4j
@@ -137,5 +140,47 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
         existsCurrencyById.orElseThrow(() -> new ExchangeRateNotFoundException("NO EXISTE ESTE N° ID '" + id + "'"));
         currencyRepository.deleteById(id);
         return Completable.complete();
+    }
+
+    /**
+     * Metodo calcular el tipo de cambio entre una moneda a otra
+     * @param request
+     * return single
+     * */
+    @Override
+    public Single<ChangeExchangeRateResponse> calculateExchangeRate(ChangeExchangeRateRequest request) {
+        ExchangeRate findExchangeRate = obtainExchange(request);
+
+        BigDecimal monto = calculateExchangeRate(request.getAmountChange(), findExchangeRate.getRateExchange());
+        return Single.fromCallable(() -> ChangeExchangeRateResponse.builder()
+                .amount(request.getAmountChange())
+                .exchanged_amount(monto)
+                .origin_currency(getDescription(request.getCodeOriginCurrency()))
+                .destination_currency(getDescription(request.getCodeDestinationCurrency()))
+                .exchange_rate(findExchangeRate.getRateExchange())
+                .build());
+    }
+
+    /**
+     * Obtengo la taza de tipo de cambio por el código de la Moneda de Origen y el Código de la Moneda Destino
+     * @param request
+     * return single
+     * */
+    private ExchangeRate obtainExchange (ChangeExchangeRateRequest request){
+        return  exchangeRateRepository
+                .findByCodeOriginCurrencyAndCodeDestinationCurrency(request.getCodeOriginCurrency(),
+                        request.getCodeDestinationCurrency())
+                .orElseThrow(()->
+                        new ExchangeRateNotFoundException("NO EXISTE UN TIPO DE CAMBIO RELACIONADO CON LA MONEDA DE ORIGEN Y DESTINO"));
+    }
+
+    private BigDecimal calculateExchangeRate(BigDecimal amount, BigDecimal exchangeRate) {
+        return amount.multiply(exchangeRate);
+    }
+
+    private String getDescription(String destinationCurrencyCode) throws ExchangeRateNotFoundException {
+        return currencyRepository.findByCode(destinationCurrencyCode)
+                .orElseThrow(() -> new ExchangeRateNotFoundException("EL CÓDIGO DE MONEDA NO EXISTE"))
+                .getDescription();
     }
 }
