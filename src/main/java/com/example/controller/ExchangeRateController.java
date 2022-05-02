@@ -45,29 +45,29 @@ public class ExchangeRateController {
     public Maybe<Currency> currencyById(@PathVariable Integer id) {
         log.info("Starting {}.{} method", "ExchangeRateController", "currencyById");
         return exchangeRateService.currencyById(id)
-                .doOnComplete(() -> log.info("Success {}.{} method - {}", "ExchangeRateController", "listCurrency"))
+                .doOnComplete(() -> log.info("Success {}.{} method - {}", "ExchangeRateController", "currencyById"))
                 .doOnError(throwable -> log.info("Error {}.{} method, with error {}", "ExchangeRateController",
-                        "listCurrency", throwable.getMessage()));
+                        "currencyById", throwable.getMessage()));
     }
 
     @PostMapping("/addCurrency")
     public Single<Currency> addCurrency(@RequestBody Currency currency) {
         log.info("Starting {}.{} method", "ExchangeRateController", "addCurrency");
         return exchangeRateService.saveCurrency(currency)
-                .doOnSuccess(s -> log.info("Success {}.{} method - {}", "ExchangeRateController", "saveCurrency", s))
+                .doOnSuccess(s -> log.info("Success {}.{} method - {}", "ExchangeRateController", "addCurrency", s))
                 .doOnError(throwable -> log.info("Error {}.{} method, with error {}", "ExchangeRateController",
-                        "saveCurrency", throwable.getMessage()))
-                .doOnTerminate(() -> log.info("Terminate {}.{} method", "ExchangeRateController", "saveCurrency"));
+                        "addCurrency", throwable.getMessage()))
+                .doOnTerminate(() -> log.info("Terminate {}.{} method", "ExchangeRateController", "addCurrency"));
     }
 
     @PutMapping("/modifyCurrency")
     public Single<Currency> updateCurrency(@RequestBody Currency currency) {
         log.info("Starting {}.{} method", "ExchangeRateController", "updateCurrency");
         return exchangeRateService.updateCurrency(currency)
-                .doOnSuccess(s -> log.info("Success {}.{} method - {}", "ExchangeRateController", "saveCurrency", s))
+                .doOnSuccess(s -> log.info("Success {}.{} method - {}", "ExchangeRateController", "updateCurrency", s))
                 .doOnError(throwable -> log.info("Error {}.{} method, with error {}", "ExchangeRateController",
-                        "saveCurrency", throwable.getMessage()))
-                .doOnTerminate(() -> log.info("Terminate {}.{} method", "ExchangeRateController", "saveCurrency"));
+                        "updateCurrency", throwable.getMessage()))
+                .doOnTerminate(() -> log.info("Terminate {}.{} method", "ExchangeRateController", "updateCurrency"));
     }
 
     @DeleteMapping("/deleteCurrency/{id}")
@@ -81,38 +81,38 @@ public class ExchangeRateController {
         log.info("Starting {}.{} method", "ExchangeRateController", "listExchangeRate");
         return exchangeRateService.listExchangeRate()
                 .doOnComplete(() -> log.info("Success {}.{} method - {}", "ExchangeRateController",
-                        "listExchange"))
+                        "listExchangeRate"))
                 .doOnError(throwable -> log.info("Error {}.{} method, with error {}", "ExchangeRateController",
-                        "listExchange", throwable.getMessage()));
+                        "listExchangeRate", throwable.getMessage()));
     }
 
     @GetMapping("/exchangeRateById/{id}")
     public Maybe<ExchangeRate> ExchangeRateId(@PathVariable Integer id) {
-        log.info("Starting {}.{} method", "ExchangeRateController", "ExchangeRateId");
+        log.info("Starting {}.{} method", "ExchangeRateController", "exchangeRateById");
         return exchangeRateService.ExchangeRateById(id)
-                .doOnComplete(() -> log.info("Success {}.{} method - {}", "ExchangeRateController", "ExchangeRateId"))
+                .doOnComplete(() -> log.info("Success {}.{} method - {}", "ExchangeRateController", "exchangeRateById"))
                 .doOnError(throwable -> log.info("Error {}.{} method, with error {}", "ExchangeRateController",
-                        "listCurrency", throwable.getMessage()));
+                        "exchangeRateById", throwable.getMessage()));
     }
 
     @PostMapping("/addExchangeRate")
     public Single<ExchangeRate> addExchangeRate(@RequestBody ExchangeRate exchangeRate) {
-        log.info("Starting {}.{} method", "ExchangeRateController", "addCurrency");
+        log.info("Starting {}.{} method", "ExchangeRateController", "addExchangeRate");
         return exchangeRateService.saveExchangeRate(exchangeRate)
-                .doOnSuccess(s -> log.info("Success {}.{} method - {}", "ExchangeRateController", "saveCurrency", s))
+                .doOnSuccess(s -> log.info("Success {}.{} method - {}", "ExchangeRateController", "addExchangeRate", s))
                 .doOnError(throwable -> log.info("Error {}.{} method, with error {}", "ExchangeRateController",
-                        "saveCurrency", throwable.getMessage()))
-                .doOnTerminate(() -> log.info("Terminate {}.{} method", "ExchangeRateController", "saveCurrency"));
+                        "addExchangeRate", throwable.getMessage()))
+                .doOnTerminate(() -> log.info("Terminate {}.{} method", "ExchangeRateController", "addExchangeRate"));
     }
 
     @PutMapping("/modifyExchangeRate")
     public Single<ExchangeRate> updateExchangeRate(@RequestBody ExchangeRate exchangeRate) {
         log.info("Starting {}.{} method", "ExchangeRateController", "updateCurrency");
         return exchangeRateService.updateExchangeRate(exchangeRate)
-                .doOnSuccess(s -> log.info("Success {}.{} method - {}", "ExchangeRateController", "saveCurrency", s))
+                .doOnSuccess(s -> log.info("Success {}.{} method - {}", "ExchangeRateController", "updateExchangeRate", s))
                 .doOnError(throwable -> log.info("Error {}.{} method, with error {}", "ExchangeRateController",
-                        "saveCurrency", throwable.getMessage()))
-                .doOnTerminate(() -> log.info("Terminate {}.{} method", "ExchangeRateController", "saveCurrency"));
+                        "updateExchangeRate", throwable.getMessage()))
+                .doOnTerminate(() -> log.info("Terminate {}.{} method", "ExchangeRateController", "updateExchangeRate"));
     }
 
     @DeleteMapping("/deleteExchangeRate/{id}")
@@ -127,7 +127,7 @@ public class ExchangeRateController {
         return exchangeRateService.calculateExchangeRate(request)
                 .doOnSuccess(s -> log.info("Success {}.{} method - {}", "ExchangeRateController", "changeExchangeRate", s))
                 .doOnError(throwable -> log.info("Error {}.{} method, with error {}", "ExchangeRateController",
-                        "saveCurrency", throwable.getMessage()))
+                        "changeExchangeRate", throwable.getMessage()))
                 .doOnTerminate(() -> log.info("Terminate {}.{} method", "ExchangeRateController", "changeExchangeRate"));
     }
 }
