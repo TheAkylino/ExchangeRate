@@ -5,6 +5,7 @@ import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 
 @Data
 @ToString
@@ -23,13 +24,16 @@ public class Currency {
 
     @Column(name = "CODE_ISO", nullable = false)
     @ApiModelProperty(notes = "Codigo iso de la moneda")
+    @NotBlank(message = "El codeIso la moneda es obligatorio")
     private String codeIso;
 
     @Column(name = "DESCRIPTION_CURRENCY",nullable = false)
     @ApiModelProperty(notes = "Descripcion de la moneda")
+    @NotBlank(message = "La Descripcion de la moneda es obligatorio")
     private String description;
 
     @Column(name = "COUNTRY", nullable = false)
     @ApiModelProperty(notes = "País de orige moneda")
+    @NotBlank(message = "El pais de la moneda es obligatorio")
     private String country;
 }

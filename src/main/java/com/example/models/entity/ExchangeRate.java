@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 
 @Data
@@ -25,13 +26,16 @@ public class ExchangeRate {
 
     @Column(name = "CODE_ISO_ORIGIN_CURRENCY", nullable = false)
     @ApiModelProperty(notes = "Codigo iso de la moneda de origen")
+    @NotBlank(message = "El código Origen Moneda es obligatorio")
     private String codeOriginCurrency;
 
     @Column(name = "CODE_ISO_DESTINATION_CURRENCY", nullable = false)
     @ApiModelProperty(notes = "Codigo iso de la moneda de destino")
+    @NotBlank(message = "El código Destino Moneda es obligatorio")
     private String codeDestinationCurrency;
 
     @Column(name = "RATE_OF_EXCHANGE", nullable = false)
     @ApiModelProperty(notes = "MONTO DE LA TAZA DE CAMBIO")
+    @NotBlank(message = "La taza de cambio es obligatorio")
     private BigDecimal rateExchange;
 }
