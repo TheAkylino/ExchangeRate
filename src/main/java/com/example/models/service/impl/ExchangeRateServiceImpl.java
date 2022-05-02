@@ -2,6 +2,7 @@ package com.example.models.service.impl;
 
 import com.example.dtos.reponse.ChangeExchangeRateResponse;
 import com.example.dtos.request.ChangeExchangeRateRequest;
+import com.example.exceptions.CurrencyCodeDescriptionExistException;
 import com.example.models.entity.Currency;
 import com.example.models.entity.ExchangeRate;
 import com.example.models.repository.CurrencyRepository;
@@ -26,6 +27,7 @@ import java.util.Optional;
 public class ExchangeRateServiceImpl implements ExchangeRateService {
 
     private Optional<Integer>  currencyId;
+    private Optional<Currency>  findCodeAndDescription;
     private Optional<Currency> existsCurrencyById ;
     private Optional<ExchangeRate> existsExchangeRateById ;
 
@@ -55,6 +57,11 @@ public class ExchangeRateServiceImpl implements ExchangeRateService {
     @Override
     public Single<Currency> saveCurrency(Currency currency) {
         log.info("Starting {}.{} method", "ExchangeRateServiceImpl", "saveCurrency");
+        findCodeAndDescription = currencyRepository.findByCodeAndDescription(currency.getCodeIso(),currency.getDescription());
+            if (findCodeAndDescription.isPresent()) {
+                findCodeAndDescription = Optional.ofNullable(null);
+                findCodeAndDescription.orElseThrow(() -> new CurrencyCodeDescriptionExistException("EL CODIGO ISO Y LA DESCRIPCION YA EXISTE EN LA BASE DE DATOS."));
+            }
         return Single.fromCallable(() -> currencyRepository.save(currency))
                 .doOnSuccess(s -> log.info("Success {}.{} method - {}", "ExchangeRateServiceImpl", "saveCurrency", s))
                 .doOnError(throwable -> log.info("Error {}.{} method, with error {}", "ExchangeRateServiceImpl",

@@ -23,5 +23,10 @@ public interface CurrencyRepository extends CrudRepository<Currency,Integer> {
     @Query(
             value = "SELECT * FROM CURRENCY C WHERE C.CODE_ISO = :code",
             nativeQuery = true)
-    Optional<Currency> findByCode(@Param("code") String name);
+    Optional<Currency> findByCode(@Param("code") String code);
+
+    @Query(
+            value = "SELECT * FROM CURRENCY C WHERE C.CODE_ISO = :code AND C.DESCRIPTION_CURRENCY = :description",
+            nativeQuery = true)
+    Optional<Currency> findByCodeAndDescription(@Param("code") String name, @Param("description") String description);
 }

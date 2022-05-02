@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
 @Entity
 @Table(name = "CURRENCY")
 @ApiModel(description="Todo los detalles de la moneda")
-public class Currency {
+public class Currency extends AuditEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

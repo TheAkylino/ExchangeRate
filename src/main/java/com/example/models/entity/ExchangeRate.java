@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "EXCHANGE_RATE")
 @ApiModel(description = "Todo los detalles del tipo de cambio")
-public class ExchangeRate {
+public class ExchangeRate extends AuditEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty(notes = "ID del tipo de cambio")
@@ -36,6 +36,6 @@ public class ExchangeRate {
 
     @Column(name = "RATE_OF_EXCHANGE", nullable = false)
     @ApiModelProperty(notes = "MONTO DE LA TAZA DE CAMBIO")
-    @NotBlank(message = "La taza de cambio es obligatorio")
+//    @NotBlank(message = "La taza de cambio es obligatorio")
     private BigDecimal rateExchange;
 }
